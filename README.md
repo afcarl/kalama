@@ -14,7 +14,7 @@ Set up featurizers in the `features` package.
 Each module in the `features` package should include a `Featurizer` class which implements:
 
 - `__init__(self, **kwargs)` (optional)
-- `featurize(self, DataFrame: data, bool: train)`
+- `featurize(self, DataFrame: data)`
 
 Featurizers can then be included by writing the modules' names in `config.py`.
 
@@ -82,7 +82,7 @@ For example, say you have the following config:
         'hi': 'there'
     }
 
-And say our data processing function's output varies depending on the values of `other` and `test['foo']`. Then our `dep_keys` would be `['other', , 'test.foo']`.
+And say our data processing function's output varies depending on the values of `other` and `test['foo']`. Then our `dep_keys` would be `['other', 'test.foo']`.
 
 If that function is called again with the same config data and a frozen function result exists, then the existing result is "defrosted" and returned.
 
@@ -121,7 +121,7 @@ The Geiger package generates a gist for a set of comments/discussions.
 
 Currently it uses Incremental Hierarchical Agglomerative Clustering so that a hierarchy can be maintained for a given set of comments and new comments can be incorporated in an online fashion.
 
-For smaller comment sets (<~500) it performs at a reasonable speed (though definitely not fast enough to re-process comments on every request), for larger sets it can get quite slow.
+For smaller comment sets (<~500) it performs at a reasonable speed (though definitely not fast enough to re-process comments on every request); for larger sets it can get quite slow.
 
 Geiger's text vectorization pipeline can be trained using the command:
 
@@ -132,7 +132,7 @@ Geiger's text vectorization pipeline can be trained using the command:
 
 The server is for exploring comments. There are a few key routes:
 
-- `/ludovico/<type>` - every 20s, show a random comment from the NYT sample according to `type` (`['picks', 'approved', 'all']`).
+- `/ludovico/<type>` - every 20 seconds, shows a random comment from the NYT sample according to `type` (`['picks', 'approved', 'all']`).
 - `/compare/<int:id>` - compare the reddit and NYT comments for a given NYT article. This data is collected via `nyt_reddit.py`.
 - `/comments/<int:id>` - see comments for a given NYT article. The data used is also that collected by `nyt_reddit.py`. Possible params include:
     - `sources` - which can be one of `['nyt', 'reddit', 'all']`. Defines which comment sets to use. Defaults to `all`.
