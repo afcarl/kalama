@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% macro render_tree(tree) -%}
+    <ul>
+        {% for comment in tree %}
+            {% if 'commentBody' in comment %}
+                <li>
+                    <h6>{{ comment['userDisplayName'] }}</h6>
+                    {{ comment['commentBody']|safe }}
+                </li>
+            {% else %}
+                <li>
+                    <h6>{{ comment['author'] }}</h6>
+                    {{ comment['body']|safe }}
+                </li>
+            {% endif %}
+            {{ render_tree(comment['replies']) }}
+        {% endfor %}
+    </ul>
+{%- endmacro %}
+
+{% block content %}
+
+  <style>
+    html, body {
+        background: #fff;
+        color: #222;
+    }
+
+    .nyt_comments,
+    .reddit_comments {
+        position: fixed;
+        overflow-y: scroll;
+        top: 0;
+        bottom: 0;
+    }
+    .nyt_comments {
+        left: 0;
+        width: 50%;
+    }
+    .reddit_comments {
+        right: 0;
+        width: 50%;
+        background: #666;
+        color: #fff;
+    }
+    div {
+        padding: 0;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    ul ul {
+        padding-left: 2em;
+    }
+    li {
+        border-top: 1px solid #eee;
+        padding: 2em;
+    }
+    ul ul li {
+        background: #eaeaea;
+        color: #222;
+        border-top: 1px solid #666;
+    }
+  </style>
+
+<div class="nyt_comments">
+    {{ render_tree(nyt) }}
+</div>
+
+<div class="reddit_comments">
+    {{ render_tree(reddit) }}
+</div>
+{% endblock %}

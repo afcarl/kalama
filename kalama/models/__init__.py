@@ -1,0 +1,1 @@
+from .commentable import Commentable

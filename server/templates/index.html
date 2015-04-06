@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="comment">
+    <div class="content {{ status }}">
+        {{ comment|safe }}
+    </div>
+</div>
+<div class="asset">
+    <div class="content">
+        {{ asset }}
+    </div
+</div>
+
+<script type="text/javascript">
+
+function Timer(cb, delay) {
+    var timerId, start, paused,
+        remaining = delay;
+
+    this.pause = function() {
+        paused = true;
+        window.clearTimeout(timerId);
+        remaining -= new Date() - start;
+    }
+
+    this.resume = function() {
+        paused = false;
+        start = new Date();
+        window.clearTimeout(timerId);
+        timerId = window.setTimeout(cb, remaining);
+    }
+
+    this.toggle = function() {
+        if (paused) {
+            this.resume();
+        } else {
+            this.pause();
+        }
+    }
+
+    this.resume();
+}
+
+var timer = new Timer(function() {
+    window.location.reload()
+}, 20000);
+
+window.onkeydown = function(ev) {
+    // Spacebar
+    if (ev.keyCode == 32) {
+        ev.preventDefault();
+        timer.toggle();
+    }
+}
+
+</script>
+
+{% endblock %}
